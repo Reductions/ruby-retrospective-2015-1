@@ -40,18 +40,16 @@ class PrimeSequence
   def each
     return if @limit <= 0
     yield 2
-    index, current = 1, 3
-    while index < @limit
+    current = 1
+    (1...@limit).each do
+      current = next_prime_after(current)
       yield current
-      index, current = index + 1, next_prime_after(current)
     end
   end
 
   def next_prime_after(current)
     candidate = current + 2
-    until candidate.prime?
-      candidate += 2
-    end
+    candidate += 2 until candidate.prime?
     candidate
   end
 end
