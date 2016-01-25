@@ -18,8 +18,6 @@ end
 class Deck
   include Enumerable
 
-  @@suits = [:spades, :hearts, :diamonds, :clubs]
-
   def initialize(deck)
     @deck = deck
   end
@@ -52,14 +50,26 @@ class Deck
     @deck.shuffle!
   end
 
+  def sort
+    @deck .sort_by! { |item| [suits.index(item.suit), ranks.index(item.rank)] }
+  end
+
   def to_s
     @deck.join("\n")
+  end
+
+  private
+
+  def base_deck
+    suits.product(ranks).map { |item| Card.new(*item.reverse) }
+  end
+
+  def suits
+    [:spades, :hearts, :diamonds, :clubs]
   end
 end
 
 class WarDeck < Deck
-  @@ranks = [:ace, :king, :queen, :jack, 10, 9, 8, 7, 6, 5, 4, 3, 2]
-
   def initialize(deck = base_deck)
     super
   end
@@ -68,15 +78,10 @@ class WarDeck < Deck
     WarHand.new(@deck.pop(26))
   end
 
-  def sort
-    @deck.sort! { |first, second| base_deck.index(first) <=>
-                  base_deck.index(second) }
-  end
-
   private
 
-  def base_deck
-    @@suits.product(@@ranks).map { |item| Card.new(*item.reverse) }
+  def ranks
+    [:ace, :king, :queen, :jack, *(10.downto(2))]
   end
 end
 
@@ -99,8 +104,6 @@ class WarHand
 end
 
 class BeloteDeck < Deck
-  @@ranks = [:ace, 10, :king, :queen, :jack, 9, 8, 7]
-
   def initialize(deck = base_deck)
     super
   end
@@ -109,15 +112,10 @@ class BeloteDeck < Deck
     BeloteHand.new(@deck.pop(8))
   end
 
-  def sort
-    @deck.sort! { |first, second| base_deck.index(first) <=>
-                  base_deck.index(second) }
-  end
-
   private
 
-  def base_deck
-    @@suits.product(@@ranks).map { |item| Card.new(*item.reverse) }
+  def ranks
+    [:ace, 10, :king, :queen, :jack, 9, 8, 7]
   end
 end
 
@@ -128,16 +126,9 @@ class BeloteHand
   def initialize(hand)
     @hand = BeloteDeck.new(hand)
   end
+
   def size
     @hand.size
-  end
-
-  def base_sequence
-    @@suits.product(@@ranks).map { |item| Card.new(*item.reverse) }
-  end
-
-  def suit_sequence(suit)
-    [suit].product(@@ranks).map { |item| Card.new(*item.reverse) }
   end
 
   def highest_of_suit(suit)
@@ -162,25 +153,29 @@ class BeloteHand
   end
 
   def carre_of_jacks?
-    @hand.select { |item| item.rank == :jack }.szie == 4
+    carre_of?(:jack)
   end
 
   def carre_of_nines?
-    @hand.select { |item| item.rank == 9 }.szie == 4
+    carre_of?(9)
   end
 
   def carre_of_aces?
-    @hand.select { |item| item.rank == :ace }.size == 4
+    carre_of?(:ace)
   end
 
   def to_s
     @hand.to_s
   end
+
+  private
+
+  def carre_of?(rank)
+    @hand.select { |item| item.rank == rank }.size == 4
+  end
 end
 
 class SixtySixDeck < Deck
-  @@ranks = [:ace, 10, :king, :queen, :jack, 9]
-
   def initialize(deck = base_deck)
     super
   end
@@ -189,15 +184,10 @@ class SixtySixDeck < Deck
     SixtySixHand.new(@deck.pop(6))
   end
 
-  def sort
-    @deck.sort! { |first, second| base_deck.index(first) <=>
-                  base_deck.index(second) }
-  end
-
   private
 
-  def base_deck
-    @@suits.product(@@ranks).map { |item| Card.new(*item.reverse) }
+  def ranks
+    [:ace, 10, :king, :queen, :jack, 9]
   end
 end
 
