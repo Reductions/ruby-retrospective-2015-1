@@ -62,10 +62,9 @@ class RationalSequence
   end
 
   def each
-    index, numerator, denominator = 0, 1, 1
-    while index < @limit
+    numerator, denominator = 1, 1
+    (0...@limit).each do
       yield Rational(numerator, denominator)
-      index += 1
       numerator, denominator = succeed(numerator, denominator)
     end
   end
