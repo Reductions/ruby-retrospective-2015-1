@@ -47,6 +47,8 @@ class PrimeSequence
     end
   end
 
+  private
+
   def next_prime_after(current)
     candidate = current + 2
     candidate += 2 until candidate.prime?
@@ -69,6 +71,8 @@ class RationalSequence
     end
   end
 
+  private
+
   def succeed(numerator, denominator)
     numerator, denominator = iterate(numerator, denominator)
     until numerator.gcd(denominator) == 1
@@ -87,7 +91,7 @@ class RationalSequence
 end
 
 module DrunkenMathematician
-  module_function
+  extend self
 
   def meaningless(limit)
     RationalSequence.new(limit).reduce(1.to_r) do |product, item|
@@ -111,7 +115,9 @@ module DrunkenMathematician
       take_while { |item| (the_number -= item) >= 0 }
   end
 
-  def non_prime_component?(rational)
+private
+
+  def self.non_prime_component?(rational)
     not (rational.numerator.prime? or rational.denominator.prime?)
   end
 end
