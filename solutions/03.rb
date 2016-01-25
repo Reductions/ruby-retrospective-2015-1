@@ -106,11 +106,9 @@ module DrunkenMathematician
 
   def worthless(limit)
     return [] if limit == 0
-    the_number = FibonacciSequence.new(limit).to_a[limit - 1]
-    RationalSequence.new(2 * the_number).take_while do |item|
-      the_number -= item
-      the_number >= 0
-    end
+    the_number = FibonacciSequence.new(limit).to_a[-1]
+    RationalSequence.new(2 * the_number).
+      take_while { |item| (the_number -= item) >= 0 }
   end
 
   def non_prime_component?(rational)
