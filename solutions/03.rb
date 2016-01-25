@@ -1,5 +1,4 @@
 class Integer < Numeric
-
   def prime?
     number = self.to_i
     return true if number == 2
@@ -11,11 +10,9 @@ class Integer < Numeric
     end
     return true
   end
-
 end
 
 class FibonacciSequence
-
   include Enumerable
 
   def initialize(limit, first: 1, second: 1)
@@ -25,21 +22,15 @@ class FibonacciSequence
   end
 
   def each
-    index, current, following = 0, @first, @second
-    while index < @limit
+    current, sequent = @first, @second
+    (0...@limit).each do
       yield current
-      index += 1
-      current, following = succeed(current, following)
+      current, sequent = sequent, current + sequent
     end
-  end
-
-  def succeed(current, following)
-    return following, current + following
   end
 end
 
 class PrimeSequence
-
   include Enumerable
 
   def initialize(limit)
@@ -63,11 +54,9 @@ class PrimeSequence
     end
     candidate
   end
-
 end
 
 class RationalSequence
-
   include Enumerable
 
   def initialize(limit)
@@ -98,11 +87,9 @@ class RationalSequence
     second = denominator + (-1)**(numerator + denominator + 1)
     return first, second
   end
-
 end
 
 module DrunkenMathematician
-
   module_function
 
   def meaningless(limit)
@@ -116,13 +103,14 @@ module DrunkenMathematician
   end
 
   def aimless(limit)
-    PrimeSequence.new(limit).each_slice(2).map { |item| Rational(*item) }.reduce(0.to_r,:+)
+    PrimeSequence.new(limit).each_slice(2)
+      .map { |item| Rational(*item) }.reduce(0.to_r,:+)
   end
 
   def worthless(limit)
     return [] if limit == 0
     the_number = FibonacciSequence.new(limit).to_a[limit - 1]
-    RationalSequence.new(2*the_number).take_while do |item|
+    RationalSequence.new(2 * the_number).take_while do |item|
       the_number -= item
       the_number >= 0
     end
@@ -131,5 +119,4 @@ module DrunkenMathematician
   def non_prime_component?(rational)
     not (rational.numerator.prime? or rational.denominator.prime?)
   end
-
 end
