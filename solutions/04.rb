@@ -170,9 +170,9 @@ class BeloteHand
   private
 
   def is_sequence?(cards)
-    cards[1..-1].all? { |card| card.suit == cards[0].suit } and
-      ranks.each_cons(cards.size).to_a.
-      any? { |sequence| sequence == cards.map { |card| card.rank }}
+    return false if cards[1..-1].any? { |card| card.suit != cards[0].suit }
+    cards_rank = cards.map { |card| card.rank }
+    ranks.each_cons(cards.size).to_a.any? { |sequence| sequence == cards_rank }
   end
 
   def is_pair?(pair)
