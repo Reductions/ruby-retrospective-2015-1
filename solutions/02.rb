@@ -3,11 +3,8 @@ def move_space(*arrays)
 end
 
 def arena(start_with, width, height)
-  width = Array.new(width)
-  height = Array.new(height)
-  width.map!.with_index{ |_, index| index + start_with }
-  height.map!.with_index{ |_, index| index + start_with }
-  width.product(height)
+  start_with.upto(start_with + height - 1).to_a.
+    product(start_with.upto(start_with + width - 1).to_a)
 end
 
 def obstacles(snake, dimensions)
