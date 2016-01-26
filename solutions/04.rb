@@ -164,10 +164,6 @@ class BeloteHand
     carre_of?(:ace)
   end
 
-  def to_s
-    @hand.to_s
-  end
-
   private
 
   def carre_of?(rank)
@@ -197,18 +193,26 @@ class SixtySixHand
   end
 
   def twenty?(trump_suit)
-    @hand.sort.select { |card| card.suit != trump_suit }.
-      each_cons(2) { |cards| return true if cards[0].rank == :king and
-                     cards[1].rank == :queen }
+    @hand.sort.select { |item| item.suit != trump_suit }.
+      each_cons(2) { |pair| return true if is_pair?(pair) }
     return false
   end
 
   def forty?(trump_suit)
-    @hand.sort.select { |card| card.suit == trump_suit }.
-      select { |card| card.rank == :king or card.rank == :queen }.size == 2
+    @hand.sort.select { |item| item.suit == trump_suit}.
+      each_cons(2) { |pair| return true if is_pair?(pair) }
+    return false
   end
 
   def size
     @hand.size
+  end
+
+  private
+
+  def is_pair?(pair)
+    pair[0].suit == pair[1].suit and
+      pair[0].rank == :king and
+      pair[1].rank == :queen
   end
 end
