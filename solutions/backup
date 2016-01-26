@@ -138,21 +138,14 @@ class BeloteHand
   end
 
   def tierce?
-    @hand.sort(ranks).
-      each_cons(3) { |cards| return true if is_sequence?(cards) }
+    @hand.sort(ranks)each_cons(2) { |cards| return true if is_sequence?(cards) }
     false
   end
 
   def quarte?
-    @hand.sort(ranks).
-      each_cons(4) { |cards| return true if is_sequence?(cards) }
-    false
   end
 
   def quint?
-    @hand.sort(ranks).
-      each_cons(5) { |cards| return true if is_sequence?(cards) }
-    false
   end
 
   def carre_of_jacks?
@@ -170,9 +163,7 @@ class BeloteHand
   private
 
   def is_sequence?(cards)
-    cards[1..-1].all? { |card| card.suit == cards[0].suit } and
-      ranks.each_cons(cards.size).to_a.
-      any? { |sequence| sequence == cards.map { |card| card.rank }}
+    true
   end
 
   def is_pair?(pair)
