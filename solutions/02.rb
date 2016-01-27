@@ -8,9 +8,8 @@ def arena(start_with, width, height)
 end
 
 def obstacles(snake, dimensions)
-  arena_with_walls = arena(-1, dimensions[:width] + 2, dimensions[:height] + 2)
-  arena_inside = arena(0, dimensions[:width], dimensions[:height])
-  arena_with_walls - arena_inside + snake.dup
+  arena(-1, dimensions[:width] + 2, dimensions[:height] + 2) -
+    arena(0, dimensions[:width], dimensions[:height]) + snake.dup
 end
 
 def move(snake, direction)
