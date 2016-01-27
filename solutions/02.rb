@@ -9,17 +9,15 @@ end
 
 def obstacles(snake, dimensions)
   arena(-1, dimensions[:width] + 2, dimensions[:height] + 2) -
-    arena(0, dimensions[:width], dimensions[:height]) + snake.dup
+    arena(0, dimensions[:width], dimensions[:height]) + snake
 end
 
 def move(snake, direction)
-  new_snake = snake.dup
-  new_snake[1 .. -1].push(move_space(new_snake[-1], direction.dup))
+  snake[1 .. -1].push(move_space(snake[-1], direction))
 end
 
 def grow(snake, direction)
-  new_snake = snake.dup
-  new_snake.push(move_space(new_snake[-1], direction.dup))
+  snake.dup.push(move_space(snake[-1], direction))
 end
 
 def new_food(food, snake, dimensions)
@@ -27,7 +25,7 @@ def new_food(food, snake, dimensions)
 end
 
 def obstacle_ahead?(snake, direction, dimensions)
-  obstacles(snake,dimensions).include?(move_space(snake[-1].dup, direction.dup))
+  obstacles(snake,dimensions).include?(move_space(snake[-1], direction))
 end
 
 def danger?(snake, direction, dimensions)
